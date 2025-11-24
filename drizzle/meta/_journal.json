@@ -8,6 +8,13 @@
       "when": 1764008021162,
       "tag": "0000_big_jocasta",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1764018004301,
+      "tag": "0001_powerful_azazel",
+      "breakpoints": true
     }
   ]
 }
