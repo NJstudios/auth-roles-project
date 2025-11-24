@@ -3,14 +3,16 @@ import { db, users } from "@/src/db/client";
 import { requireAdmin } from "@/src/lib/auth-guards";
 import { eq } from "drizzle-orm";
 
-type Params = { params: { id: string } };
+export async function PATCH(req: Request, context: any) {
+  // Next 15 may pass params as a Promise; this works in both cases
+  const params = await context.params;
+  const id = params.id as string;
 
-export async function PATCH(req: Request, { params }: Params) {
   try {
     await requireAdmin();
 
     const body = await req.json();
-    const { role } = body as { role: "USER" | "ADMIN" };
+    const role = (body as { role?: string }).role;
 
     if (role !== "USER" && role !== "ADMIN") {
       return NextResponse.json({ error: "Invalid role" }, { status: 400 });
@@ -19,7 +21,7 @@ export async function PATCH(req: Request, { params }: Params) {
     const updated = await db
       .update(users)
       .set({ role })
-      .where(eq(users.id, params.id))
+      .where(eq(users.id, id))
       .returning({
         id: users.id,
         email: users.email,
@@ -39,6 +41,7 @@ export async function PATCH(req: Request, { params }: Params) {
     if (err?.message === "FORBIDDEN") {
       return new NextResponse("Forbidden", { status: 403 });
     }
+
     console.error("Update role error:", err);
     return new NextResponse("Server error", { status: 500 });
   }
