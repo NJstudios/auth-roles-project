@@ -46,7 +46,7 @@ This project is a full-stack TypeScript application using **Next.js App Router**
 ├── package.json
 └── README.md
 
-
+```
 🛠️ Setup Instructions
 1. Clone and Install
 git clone <your-repo-url>
